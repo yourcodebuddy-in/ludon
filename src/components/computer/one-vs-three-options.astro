@@ -4,6 +4,7 @@ import redHorse from "../../assets/horses/red.png";
 import blueHorse from "../../assets/horses/blue.png";
 import yellowHorse from "../../assets/horses/yellow.png";
 import greenHorse from "../../assets/horses/green.png";
+import computerImg from "../../assets/computer.png";
 ---
 
 <section id="one-vs-three-options" class="space-y-5 hidden">
@@ -18,6 +19,12 @@ import greenHorse from "../../assets/horses/green.png";
       value="Player 1"
       placeholder="Player 1 Name"
       class="h-9 rounded-xl text-center w-full bg-white"
+    /><Image
+      src={computerImg}
+      alt="Computer"
+      id="one-vs-three-computer-p1"
+      aria-selected="false"
+      class="bg-white p-1.5 w-10 h-10 rounded-xl aria-selected:bg-ludon-yellow cursor-pointer"
     />
   </div>
   <div class="flex [&_input]:flex-1 gap-4 bg-gray-200 p-3 rounded-2xl">
@@ -28,6 +35,12 @@ import greenHorse from "../../assets/horses/green.png";
       value="Player 2"
       placeholder="Player 2 Name"
       class="h-9 rounded-xl text-center w-full bg-white"
+    /><Image
+      src={computerImg}
+      alt="Computer"
+      id="one-vs-three-computer-p2"
+      aria-selected="false"
+      class="bg-white p-1.5 w-10 h-10 rounded-xl aria-selected:bg-ludon-yellow cursor-pointer"
     />
   </div>
   <div class="flex [&_input]:flex-1 gap-4 bg-gray-200 p-3 rounded-2xl">
@@ -38,6 +51,12 @@ import greenHorse from "../../assets/horses/green.png";
       value="Player 3"
       placeholder="Player 3 Name"
       class="h-9 rounded-xl text-center w-full bg-white"
+    /><Image
+      src={computerImg}
+      alt="Computer"
+      id="one-vs-three-computer-p3"
+      aria-selected="false"
+      class="bg-white p-1.5 w-10 h-10 rounded-xl aria-selected:bg-ludon-yellow cursor-pointer"
     />
   </div>
   <div class="flex [&_input]:flex-1 gap-4 bg-gray-200 p-3 rounded-2xl">
@@ -48,6 +67,12 @@ import greenHorse from "../../assets/horses/green.png";
       value="Player 4"
       placeholder="Player 4 Name"
       class="h-9 rounded-xl text-center w-full bg-white"
+    /><Image
+      src={computerImg}
+      alt="Computer"
+      id="one-vs-three-computer-p4"
+      aria-selected="false"
+      class="bg-white p-1.5 w-10 h-10 rounded-xl aria-selected:bg-ludon-yellow cursor-pointer"
     />
   </div>
   <button id="start-game-one-vs-three" class="bg-ludon-green text-white rounded-xl p-2.5 text-lg w-full">Start</button>
@@ -61,11 +86,65 @@ import greenHorse from "../../assets/horses/green.png";
   const player4Input = document.getElementById("one-vs-three-p4-name") as HTMLInputElement | null;
   const startButton = document.getElementById("start-game-one-vs-three") as HTMLButtonElement | null;
 
+  // Computer buttons
+  const computerP1 = document.getElementById("one-vs-three-computer-p1");
+  const computerP2 = document.getElementById("one-vs-three-computer-p2");
+  const computerP3 = document.getElementById("one-vs-three-computer-p3");
+  const computerP4 = document.getElementById("one-vs-three-computer-p4");
+  const computerButtons = [computerP1, computerP2, computerP3, computerP4];
+
   // Initialize session storage with default values
   sessionStorage.setItem("one-vs-three-player-1-name", "Player 1");
   sessionStorage.setItem("one-vs-three-player-2-name", "Player 2");
   sessionStorage.setItem("one-vs-three-player-3-name", "Player 3");
   sessionStorage.setItem("one-vs-three-player-4-name", "Player 4");
+
+  // Load previously saved computer selections from session storage
+  try {
+    const savedComputerPlayers = JSON.parse(sessionStorage.getItem("one-vs-three-computer-players") || "[]");
+    savedComputerPlayers.forEach((player: string) => {
+      const playerNum = parseInt(player.substring(1));
+      const button = computerButtons[playerNum - 1];
+      if (button) {
+        button.setAttribute("aria-selected", "true");
+      }
+    });
+  } catch (error) {
+    console.error("Error loading saved computer selections:", error);
+  }
+
+  // Handle computer selection
+  computerButtons.forEach((button, index) => {
+    button?.addEventListener("click", () => {
+      const playerNumber = index + 1;
+      const isSelected = button.getAttribute("aria-selected") === "true";
+
+      // Toggle selection for this button
+      button.setAttribute("aria-selected", isSelected ? "false" : "true");
+
+      // Get current computer players from session storage
+      let computerPlayers = JSON.parse(sessionStorage.getItem("one-vs-three-computer-players") || "[]");
+
+      if (isSelected) {
+        // Remove this player from computer players
+        computerPlayers = computerPlayers.filter((p: string) => p !== `p${playerNumber}`);
+      } else {
+        // Add this player to computer players
+        computerPlayers.push(`p${playerNumber}`);
+      }
+
+      // Make sure not all players are computer
+      if (computerPlayers.length === 4) {
+        // If all are selected, deselect the last one clicked
+        button.setAttribute("aria-selected", "false");
+        computerPlayers = computerPlayers.filter((p: string) => p !== `p${playerNumber}`);
+        alert("All players cannot be computer controlled. At least one player must be human.");
+      }
+
+      // Save updated computer players to session storage
+      sessionStorage.setItem("one-vs-three-computer-players", JSON.stringify(computerPlayers));
+    });
+  });
 
   // Save player names
   function savePlayerNames() {

@@ -1,20 +1,20 @@
 ---
-import Button from "../components/game-button.astro";
 import ShareButton from "../components/share-button.astro";
 import Layout from "../layouts/Layout.astro";
+import GameButton from "../components/game-button.astro";
 ---
 
 <Layout>
   <main class="flex justify-center items-center h-dvh p-2">
-    <div class="rounded-2xl shadow-md bg-white px-10 py-5 w-full max-w-md space-y-5">
+    <div class="rounded-2xl shadow-md bg-white px-10 py-5 w-full max-w-lg space-y-5">
       <div>
-        <img class="block mx-auto min-h-32 h-32" draggable="false" src="/logo.png" alt="Ludon logo" loading="eager" />
+        <img class="block mx-auto min-h-40 h-40" draggable="false" src="/logo.png" alt="Ludon logo" loading="eager" />
         <h2 class="text-center font-semibold text-lg">Roll the Dice, Rule the Board!</h2>
       </div>
 
       <div class="grid grid-cols-2 gap-8">
-        <a href="/pass-and-play"> <Button class="w-full" text="Pass & Play" color="#629e76" /></a>
-        <a href="/computer"> <Button class="w-full" text="Computer" color="#3ebbf7" /></a>
+        <a href="/pass-and-play"> <GameButton class="w-full" text="Pass & Play" color="#629e76" /></a>
+        <a href="/computer"> <GameButton class="w-full" text="Computer" color="#3ebbf7" /></a>
       </div>
 
       <div>

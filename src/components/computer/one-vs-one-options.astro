@@ -26,6 +26,13 @@ import computerImg from "../../assets/computer.png";
         placeholder="Player 1 Name"
         class="h-9 rounded-xl text-center w-full bg-white"
       />
+      <Image
+        src={computerImg}
+        alt="Computer"
+        id="computer-p1-red"
+        aria-selected="false"
+        class="bg-white p-1.5 w-10 h-10 rounded-xl aria-selected:bg-ludon-yellow cursor-pointer"
+      />
     </div>
     <div class="space-x-4">
       <Image src={greenHorse} alt="Green horse" class="w-5 rounded-md" />
@@ -35,6 +42,13 @@ import computerImg from "../../assets/computer.png";
         value="Player 2"
         placeholder="Player 2 Name"
         class="h-9 rounded-xl text-center w-full bg-white"
+      />
+      <Image
+        src={computerImg}
+        alt="Computer"
+        id="computer-p2-green"
+        aria-selected="false"
+        class="bg-white p-1.5 w-10 h-10 rounded-xl aria-selected:bg-ludon-yellow cursor-pointer"
       />
     </div>
   </div>
@@ -51,6 +65,13 @@ import computerImg from "../../assets/computer.png";
         placeholder="Player 1 Name"
         class="h-9 rounded-xl text-center w-full bg-white"
       />
+      <Image
+        src={computerImg}
+        alt="Computer"
+        id="computer-p1-blue"
+        aria-selected="false"
+        class="bg-white p-1.5 w-10 h-10 rounded-xl aria-selected:bg-ludon-yellow cursor-pointer"
+      />
     </div>
     <div class="space-x-4">
       <Image src={yellowHorse} alt="Yellow horse" class="w-5 mr-5 rounded-md" />
@@ -60,6 +81,13 @@ import computerImg from "../../assets/computer.png";
         value="Player 2"
         placeholder="Player 2 Name"
         class="h-9 rounded-xl text-center w-full bg-white"
+      />
+      <Image
+        src={computerImg}
+        alt="Computer"
+        id="computer-p2-yellow"
+        aria-selected="false"
+        class="bg-white p-1.5 w-10 h-10 rounded-xl aria-selected:bg-ludon-yellow cursor-pointer"
       />
     </div>
   </div>
@@ -76,9 +104,18 @@ import computerImg from "../../assets/computer.png";
   const player2YellowInput = document.getElementById("one-vs-one-p2-yellow-name") as HTMLInputElement | null;
   const startButton = document.getElementById("start-game") as HTMLButtonElement | null;
 
+  // Computer buttons
+  const computerP1Red = document.getElementById("computer-p1-red");
+  const computerP2Green = document.getElementById("computer-p2-green");
+  const computerP1Blue = document.getElementById("computer-p1-blue");
+  const computerP2Yellow = document.getElementById("computer-p2-yellow");
+  const computerButtons = [computerP1Red, computerP2Green, computerP1Blue, computerP2Yellow];
+
   // Initialize from session storage or set defaults
   const savedHorse1 = sessionStorage.getItem("one-vs-one-horse-1") || "red";
   const savedHorse2 = sessionStorage.getItem("one-vs-one-horse-2") || "green";
+  const savedComputerPlayer = sessionStorage.getItem("one-vs-one-computer-player") || "";
+
   sessionStorage.setItem("player1-name", "Player 1");
   sessionStorage.setItem("player2-name", "Player 2");
 
@@ -91,12 +128,36 @@ import computerImg from "../../assets/computer.png";
     blueYellowCombo?.setAttribute("aria-selected", "false");
   }
 
+  // Set initial computer selection based on saved values
+  if (savedComputerPlayer) {
+    const playerToButtonMap = {
+      p1: "computer-p1-red",
+      p2: "computer-p2-green",
+      p3: "computer-p1-blue",
+      p4: "computer-p2-yellow",
+    };
+
+    const buttonId = playerToButtonMap[savedComputerPlayer as keyof typeof playerToButtonMap];
+    const computerButton = document.getElementById(buttonId);
+    if (computerButton) {
+      computerButton.setAttribute("aria-selected", "true");
+    }
+  }
+
   // Handle combo selection
   redGreenCombo?.addEventListener("click", () => {
     redGreenCombo.setAttribute("aria-selected", "true");
     blueYellowCombo?.setAttribute("aria-selected", "false");
     sessionStorage.setItem("one-vs-one-horse-1", "red");
     sessionStorage.setItem("one-vs-one-horse-2", "green");
+
+    // Hide computer selection for inactive combo
+    if (
+      computerP1Blue?.getAttribute("aria-selected") === "true" ||
+      computerP2Yellow?.getAttribute("aria-selected") === "true"
+    ) {
+      resetComputerSelection();
+    }
   });
 
   blueYellowCombo?.addEventListener("click", () => {
@@ -104,6 +165,40 @@ import computerImg from "../../assets/computer.png";
     blueYellowCombo.setAttribute("aria-selected", "true");
     sessionStorage.setItem("one-vs-one-horse-1", "blue");
     sessionStorage.setItem("one-vs-one-horse-2", "yellow");
+
+    // Hide computer selection for inactive combo
+    if (
+      computerP1Red?.getAttribute("aria-selected") === "true" ||
+      computerP2Green?.getAttribute("aria-selected") === "true"
+    ) {
+      resetComputerSelection();
+    }
+  });
+
+  // Handle computer selection
+  function resetComputerSelection() {
+    computerButtons.forEach((button) => {
+      if (button) {
+        button.setAttribute("aria-selected", "false");
+      }
+    });
+    sessionStorage.removeItem("one-vs-one-computer-player");
+  }
+
+  computerButtons.forEach((button, index) => {
+    button?.addEventListener("click", () => {
+      const playerNumber = index + 1;
+      const isSelected = button.getAttribute("aria-selected") === "true";
+
+      // Reset all computer selections first
+      resetComputerSelection();
+
+      // Toggle selection for clicked button (if it was not selected, select it)
+      if (!isSelected) {
+        button.setAttribute("aria-selected", "true");
+        sessionStorage.setItem("one-vs-one-computer-player", `p${playerNumber}`);
+      }
+    });
   });
 
   // Save player names
@@ -130,6 +225,7 @@ import computerImg from "../../assets/computer.png";
 
   // Save names when start button is clicked
   startButton?.addEventListener("click", () => {
+    savePlayerNames();
     window.location.href = "/game-board";
   });
 </script>
