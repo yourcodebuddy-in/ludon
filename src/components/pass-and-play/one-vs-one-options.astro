@@ -1,0 +1,134 @@
+---
+import { Image } from "astro:assets";
+import redHorse from "../../assets/horses/red.png";
+import blueHorse from "../../assets/horses/blue.png";
+import yellowHorse from "../../assets/horses/yellow.png";
+import greenHorse from "../../assets/horses/green.png";
+---
+
+<section id="one-vs-one-options" class="space-y-5">
+  <div>
+    <h2 class="text-center text-xl">Enter player names</h2>
+    <p class="text-center text-gray-600">Select any one horse combination for your game.</p>
+  </div>
+  <div
+    id="red-green-combo"
+    aria-selected="true"
+    class="aria-selected:bg-ludon-green bg-gray-200 rounded-2xl p-4 *:flex *:items-center space-y-5"
+  >
+    <div>
+      <Image src={redHorse} alt="Red horse" class="w-5 mr-5 rounded-md" />
+      <input
+        type="text"
+        id="one-vs-one-p1-red-name"
+        value="Player 1"
+        placeholder="Player 1 Name"
+        class="h-9 rounded-xl text-center w-full bg-white"
+      />
+    </div>
+    <div>
+      <Image src={greenHorse} alt="Green horse" class="w-5 mr-5 rounded-md" />
+      <input
+        type="text"
+        id="one-vs-one-p2-green-name"
+        value="Player 2"
+        placeholder="Player 2 Name"
+        class="h-9 rounded-xl text-center w-full bg-white"
+      />
+    </div>
+  </div>
+  <div
+    id="blue-yellow-combo"
+    class="aria-selected:bg-ludon-green bg-gray-200 rounded-2xl p-4 *:flex *:items-center space-y-5"
+  >
+    <div>
+      <Image src={blueHorse} alt="Blue horse" class="w-5 mr-5 rounded-md" />
+      <input
+        type="text"
+        id="one-vs-one-p1-blue-name"
+        value="Player 1"
+        placeholder="Player 1 Name"
+        class="h-9 rounded-xl text-center w-full bg-white"
+      />
+    </div>
+    <div>
+      <Image src={yellowHorse} alt="Yellow horse" class="w-5 mr-5 rounded-md" />
+      <input
+        type="text"
+        id="one-vs-one-p2-yellow-name"
+        value="Player 2"
+        placeholder="Player 2 Name"
+        class="h-9 rounded-xl text-center w-full bg-white"
+      />
+    </div>
+  </div>
+  <button id="start-game" class="bg-ludon-green text-white rounded-xl p-2.5 text-lg w-full">Start</button>
+</section>
+
+<script>
+  // Get elements
+  const redGreenCombo = document.getElementById("red-green-combo");
+  const blueYellowCombo = document.getElementById("blue-yellow-combo");
+  const player1RedInput = document.getElementById("one-vs-one-p1-red-name") as HTMLInputElement | null;
+  const player2GreenInput = document.getElementById("one-vs-one-p2-green-name") as HTMLInputElement | null;
+  const player1BlueInput = document.getElementById("one-vs-one-p1-blue-name") as HTMLInputElement | null;
+  const player2YellowInput = document.getElementById("one-vs-one-p2-yellow-name") as HTMLInputElement | null;
+  const startButton = document.getElementById("start-game") as HTMLButtonElement | null;
+
+  // Initialize from session storage or set defaults
+  const savedHorse1 = sessionStorage.getItem("one-vs-one-horse-1") || "red";
+  const savedHorse2 = sessionStorage.getItem("one-vs-one-horse-2") || "green";
+  sessionStorage.setItem("player1-name", "Player 1");
+  sessionStorage.setItem("player2-name", "Player 2");
+
+  // Set initial selection
+  if (savedHorse1 === "blue" && savedHorse2 === "yellow") {
+    redGreenCombo?.setAttribute("aria-selected", "false");
+    blueYellowCombo?.setAttribute("aria-selected", "true");
+  } else {
+    redGreenCombo?.setAttribute("aria-selected", "true");
+    blueYellowCombo?.setAttribute("aria-selected", "false");
+  }
+
+  // Handle combo selection
+  redGreenCombo?.addEventListener("click", () => {
+    redGreenCombo.setAttribute("aria-selected", "true");
+    blueYellowCombo?.setAttribute("aria-selected", "false");
+    sessionStorage.setItem("one-vs-one-horse-1", "red");
+    sessionStorage.setItem("one-vs-one-horse-2", "green");
+  });
+
+  blueYellowCombo?.addEventListener("click", () => {
+    redGreenCombo?.setAttribute("aria-selected", "false");
+    blueYellowCombo.setAttribute("aria-selected", "true");
+    sessionStorage.setItem("one-vs-one-horse-1", "blue");
+    sessionStorage.setItem("one-vs-one-horse-2", "yellow");
+  });
+
+  // Save player names
+  function savePlayerNames() {
+    let player1Name, player2Name;
+
+    if (redGreenCombo?.getAttribute("aria-selected") === "true") {
+      player1Name = player1RedInput?.value || "Player 1";
+      player2Name = player2GreenInput?.value || "Player 2";
+    } else {
+      player1Name = player1BlueInput?.value || "Player 1";
+      player2Name = player2YellowInput?.value || "Player 2";
+    }
+
+    sessionStorage.setItem("player1-name", player1Name);
+    sessionStorage.setItem("player2-name", player2Name);
+  }
+
+  // Save names on input change
+  player1RedInput?.addEventListener("input", savePlayerNames);
+  player2GreenInput?.addEventListener("input", savePlayerNames);
+  player1BlueInput?.addEventListener("input", savePlayerNames);
+  player2YellowInput?.addEventListener("input", savePlayerNames);
+
+  // Save names when start button is clicked
+  startButton?.addEventListener("click", () => {
+    window.location.href = "/game-board";
+  });
+</script>

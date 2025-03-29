@@ -1,0 +1,97 @@
+---
+import { Image } from "astro:assets";
+import redHorse from "../../assets/horses/red.png";
+import blueHorse from "../../assets/horses/blue.png";
+import yellowHorse from "../../assets/horses/yellow.png";
+import greenHorse from "../../assets/horses/green.png";
+---
+
+<section id="one-vs-three-options" class="space-y-5 hidden">
+  <div>
+    <h2 class="text-center text-xl">Enter player names</h2>
+  </div>
+  <div class="flex [&_input]:flex-1 gap-4 bg-gray-200 p-3 rounded-2xl">
+    <Image src={redHorse} alt="Red horse" class="r w-4.5 h-8 opacity-100" />
+    <input
+      type="text"
+      id="onevs3-p1-name"
+      value="Player 1"
+      placeholder="Player 1 Name"
+      class="h-9 rounded-xl text-center w-full bg-white"
+    />
+  </div>
+  <div class="flex [&_input]:flex-1 gap-4 bg-gray-200 p-3 rounded-2xl">
+    <Image src={blueHorse} alt="Blue horse" class="r w-4.5 h-8 opacity-100" />
+    <input
+      type="text"
+      id="onevs3-p2-name"
+      value="Player 2"
+      placeholder="Player 2 Name"
+      class="h-9 rounded-xl text-center w-full bg-white"
+    />
+  </div>
+  <div class="flex [&_input]:flex-1 gap-4 bg-gray-200 p-3 rounded-2xl">
+    <Image src={yellowHorse} alt="Yellow horse" class="r w-4.5 h-8 opacity-100" />
+    <input
+      type="text"
+      id="onevs3-p3-name"
+      value="Player 3"
+      placeholder="Player 3 Name"
+      class="h-9 rounded-xl text-center w-full bg-white"
+    />
+  </div>
+  <div class="flex [&_input]:flex-1 gap-4 bg-gray-200 p-3 rounded-2xl">
+    <Image src={greenHorse} alt="Green horse" class="r w-4.5 h-8 opacity-100" />
+    <input
+      type="text"
+      id="onevs3-p4-name"
+      value="Player 4"
+      placeholder="Player 4 Name"
+      class="h-9 rounded-xl text-center w-full bg-white"
+    />
+  </div>
+  <button id="start-game-one-vs-three" class="bg-ludon-green text-white rounded-xl p-2.5 text-lg w-full">Start</button>
+</section>
+
+<script>
+  // Get elements
+  const player1Input = document.getElementById("onevs3-p1-name") as HTMLInputElement | null;
+  const player2Input = document.getElementById("onevs3-p2-name") as HTMLInputElement | null;
+  const player3Input = document.getElementById("onevs3-p3-name") as HTMLInputElement | null;
+  const player4Input = document.getElementById("onevs3-p4-name") as HTMLInputElement | null;
+  const startButton = document.getElementById("start-game-one-vs-three") as HTMLButtonElement | null;
+
+  // Initialize session storage with default values
+  sessionStorage.setItem("onevs3Player1Name", "Player 1");
+  sessionStorage.setItem("onevs3Player2Name", "Player 2");
+  sessionStorage.setItem("onevs3Player3Name", "Player 3");
+  sessionStorage.setItem("onevs3Player4Name", "Player 4");
+
+  // Save player names
+  function savePlayerNames() {
+    if (player1Input) {
+      sessionStorage.setItem("onevs3Player1Name", player1Input.value || "Player 1");
+    }
+    if (player2Input) {
+      sessionStorage.setItem("onevs3Player2Name", player2Input.value || "Player 2");
+    }
+    if (player3Input) {
+      sessionStorage.setItem("onevs3Player3Name", player3Input.value || "Player 3");
+    }
+    if (player4Input) {
+      sessionStorage.setItem("onevs3Player4Name", player4Input.value || "Player 4");
+    }
+  }
+
+  // Save names on input change
+  player1Input?.addEventListener("input", savePlayerNames);
+  player2Input?.addEventListener("input", savePlayerNames);
+  player3Input?.addEventListener("input", savePlayerNames);
+  player4Input?.addEventListener("input", savePlayerNames);
+
+  // Save names when start button is clicked
+  startButton?.addEventListener("click", () => {
+    savePlayerNames();
+    window.location.href = "/game-board";
+  });
+</script>

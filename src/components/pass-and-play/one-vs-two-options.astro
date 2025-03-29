@@ -1,0 +1,169 @@
+---
+import { Image } from "astro:assets";
+import redHorse from "../../assets/horses/red.png";
+import blueHorse from "../../assets/horses/blue.png";
+import yellowHorse from "../../assets/horses/yellow.png";
+import greenHorse from "../../assets/horses/green.png";
+---
+
+<section id="one-vs-two-options" class="space-y-5 hidden">
+  <div>
+    <h2 class="text-center text-xl">Enter player names</h2>
+    <p class="text-center text-gray-600">Select player horse for every player.</p>
+  </div>
+  <div class="flex [&_input]:flex-1 gap-4 bg-gray-200 p-3 rounded-2xl">
+    <div class="flex gap-4">
+      <Image src={redHorse} alt="Red horse" id="one-vs-two-r1" class="r w-4.5 h-8 opacity-100" />
+      <Image src={blueHorse} alt="Blue horse" id="one-vs-two-b1" class="b w-4.5 h-8 opacity-40" />
+      <Image src={yellowHorse} alt="Yellow horse" id="one-vs-two-y1" class="y w-4.5 h-8 opacity-40" />
+      <Image src={greenHorse} alt="Green horse" id="one-vs-two-g1" class="g w-4.5 h-8 opacity-40" />
+    </div>
+    <input
+      type="text"
+      id="one-vs-two-p1-name"
+      value="Player 1"
+      placeholder="Player 1 Name"
+      class="h-9 rounded-xl text-center w-full bg-white"
+    />
+  </div>
+  <div class="flex [&_input]:flex-1 gap-4 bg-gray-200 p-3 rounded-2xl">
+    <div class="flex gap-4">
+      <Image src={redHorse} alt="Red horse" id="one-vs-two-r2" class="r w-4.5 h-8 opacity-40" />
+      <Image src={blueHorse} alt="Blue horse" id="one-vs-two-b2" class="b w-4.5 h-8 opacity-100" />
+      <Image src={yellowHorse} alt="Yellow horse" id="one-vs-two-y2" class="y w-4.5 h-8 opacity-40" />
+      <Image src={greenHorse} alt="Green horse" id="one-vs-two-g2" class="g w-4.5 h-8 opacity-40" />
+    </div>
+    <input
+      type="text"
+      id="one-vs-two-p2-name"
+      value="Player 2"
+      placeholder="Player 2 Name"
+      class="h-9 rounded-xl text-center w-full bg-white"
+    />
+  </div>
+  <div class="flex [&_input]:flex-1 gap-4 bg-gray-200 p-3 rounded-2xl">
+    <div class="flex gap-4">
+      <Image src={redHorse} alt="Red horse" id="one-vs-two-r3" class="r w-4.5 h-8 opacity-40" />
+      <Image src={blueHorse} alt="Blue horse" id="one-vs-two-b3" class="b w-4.5 h-8 opacity-40" />
+      <Image src={yellowHorse} alt="Yellow horse" id="one-vs-two-y3" class="y w-4.5 h-8 opacity-100" />
+      <Image src={greenHorse} alt="Green horse" id="one-vs-two-g3" class="g w-4.5 h-8 opacity-40" />
+    </div>
+    <input
+      type="text"
+      id="one-vs-two-p3-name"
+      value="Player 3"
+      placeholder="Player 3 Name"
+      class="h-9 rounded-xl text-center w-full bg-white"
+    />
+  </div>
+  <button id="start-game-one-vs-two" class="bg-ludon-green text-white rounded-xl p-2.5 text-lg w-full">Start</button>
+</section>
+
+<script>
+  // Get elements
+  const horseImages = document.querySelectorAll("#one-vs-two-options img");
+  const player1Input = document.getElementById("one-vs-two-p1-name") as HTMLInputElement | null;
+  const player2Input = document.getElementById("one-vs-two-p2-name") as HTMLInputElement | null;
+  const player3Input = document.getElementById("one-vs-two-p3-name") as HTMLInputElement | null;
+  const startButton = document.getElementById("start-game-one-vs-two") as HTMLButtonElement | null;
+
+  // Track selected horses for each player
+  const selectedHorses = {
+    1: "r", // Default selections
+    2: "b",
+    3: "y",
+  };
+
+  // Initialize session storage with default values
+  sessionStorage.setItem("one-vs-two-player-1", "1");
+  sessionStorage.setItem("game-participants-1", ".r57");
+  sessionStorage.setItem("one-vs-two-player-2", "2");
+  sessionStorage.setItem("game-participants-2", ".b57");
+  sessionStorage.setItem("one-vs-two-player-3", "3");
+  sessionStorage.setItem("game-participants-3", ".y57");
+  sessionStorage.setItem("one-vs-two-not-selected-player", "4");
+
+  sessionStorage.setItem("one-vs-two-player-1-name", "Player 1");
+  sessionStorage.setItem("one-vs-two-player-2-name", "Player 2");
+  sessionStorage.setItem("one-vs-two-player-3-name", "Player 3");
+
+  // Handle horse selection
+  horseImages.forEach((img) => {
+    img.addEventListener("click", (event) => {
+      const target = event.target as HTMLImageElement;
+      const targetId = target.id;
+      const targetClass = target.className.split(" ")[0]; // Get the first class (r, b, y, or g)
+      const playerNum = targetId.charAt(targetId.length - 1);
+
+      // If this horse is already selected by another player, don't allow selection
+      for (const [player, horse] of Object.entries(selectedHorses)) {
+        if (player !== playerNum && horse === targetClass) {
+          return; // Horse already selected by another player
+        }
+      }
+
+      // Update the selected horse for this player
+      const previousHorse = selectedHorses[playerNum as unknown as keyof typeof selectedHorses];
+      selectedHorses[playerNum as unknown as keyof typeof selectedHorses] = targetClass;
+
+      // Reset opacity for all horses in this player's row
+      const siblings = Array.from(target.parentElement?.children || []) as HTMLImageElement[];
+      siblings.forEach((sib) => {
+        sib.style.opacity = "0.4";
+      });
+
+      // Set clicked horse to full opacity
+      target.style.opacity = "1";
+
+      // Map horse type to index
+      const horseTypeToIndex = { r: 1, b: 2, y: 3, g: 4 };
+      const horseIndex = horseTypeToIndex[targetClass as keyof typeof horseTypeToIndex];
+
+      // Save selected horse to session storage
+      sessionStorage.setItem(`one-vs-two-player-${playerNum}`, horseIndex.toString());
+      sessionStorage.setItem(`game-participants-${playerNum}`, `.${targetClass}57`);
+
+      // Update which horse is not selected
+      const usedHorses = Object.values(selectedHorses);
+      for (const horseType of ["r", "b", "y", "g"]) {
+        if (!usedHorses.includes(horseType)) {
+          const notSelectedIndex = horseTypeToIndex[horseType as keyof typeof horseTypeToIndex];
+          sessionStorage.setItem("one-vs-two-not-selected-player", notSelectedIndex.toString());
+          break;
+        }
+      }
+    });
+  });
+
+  // Save player names
+  function savePlayerNames() {
+    if (player1Input) {
+      sessionStorage.setItem("one-vs-two-player-1-name", player1Input.value || "Player 1");
+    }
+    if (player2Input) {
+      sessionStorage.setItem("one-vs-two-player-2-name", player2Input.value || "Player 2");
+    }
+    if (player3Input) {
+      sessionStorage.setItem("one-vs-two-player-3-name", player3Input.value || "Player 3");
+    }
+  }
+
+  // Save names on input change
+  player1Input?.addEventListener("input", savePlayerNames);
+  player2Input?.addEventListener("input", savePlayerNames);
+  player3Input?.addEventListener("input", savePlayerNames);
+
+  // Validate and save names when start button is clicked
+  startButton?.addEventListener("click", () => {
+    // Check if all players have unique horses
+    const uniqueHorses = new Set(Object.values(selectedHorses));
+    if (uniqueHorses.size !== 3) {
+      alert("Each player must select a unique horse color before starting the game.");
+      return;
+    }
+
+    // Save player names and proceed
+    savePlayerNames();
+    window.location.href = "/game-board";
+  });
+</script>

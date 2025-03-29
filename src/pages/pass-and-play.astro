@@ -1,0 +1,21 @@
+---
+import { Image } from "astro:assets";
+import Layout from "../layouts/Layout.astro";
+
+import { cn } from "../lib/utils";
+import OneVsOneOptions from "../components/pass-and-play/one-vs-one-options.astro";
+import OneVsTwoOptions from "../components/pass-and-play/one-vs-two-options.astro";
+import OneVsThreeOptions from "../components/pass-and-play/one-vs-three-options.astro";
+import SelectGameMode from "../components/select-game-mode.astro";
+---
+
+<Layout>
+  <main class="flex justify-center items-center min-h-screen p-2 bg-azure w-[95%] mx-auto">
+    <div class="rounded-2xl shadow-md bg-white p-10 w-full max-w-md">
+      <SelectGameMode />
+      <OneVsOneOptions />
+      <OneVsTwoOptions />
+      <OneVsThreeOptions />
+    </div>
+  </main>
+</Layout>
