@@ -1,0 +1,14 @@
+---
+import Button from "./game-button.astro";
+---
+
+<Button id="share-btn" class="w-fit !h-10 mx-auto block" text="Share Now!" color="#db5c4c" />
+
+<script>
+  import { shareApp } from "../lib/share";
+
+  const shareBtn = document.getElementById("share-btn");
+  if (shareBtn) {
+    shareBtn.addEventListener("click", shareApp);
+  }
+</script>

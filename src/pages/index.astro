@@ -1,7 +1,35 @@
 ---
-import Layout from '../layouts/Layout.astro';
+import Button from "../components/game-button.astro";
+import ShareButton from "../components/share-button.astro";
+import Layout from "../layouts/Layout.astro";
 ---
 
 <Layout>
-	<h1>Ludon - Roll the Dice, Rule the Board!</h1>
+  <main class="flex justify-center items-center h-dvh p-2">
+    <div class="rounded-2xl shadow-md bg-white px-10 py-5 w-full max-w-sm space-y-5">
+      <div>
+        <img class="block mx-auto min-h-32 h-32" draggable="false" src="/logo.png" alt="Ludon logo" loading="eager" />
+        <h2 class="text-center font-semibold text-lg">Roll the Dice, Rule the Board!</h2>
+      </div>
+
+      <div class="grid grid-cols-2 gap-8">
+        <a href="/pass-and-play"> <Button class="w-full" text="Pass & Play" color="#629e76" /></a>
+        <a href="/computer"> <Button class="w-full" text="Computer" color="#3ebbf7" /></a>
+      </div>
+
+      <div>
+        <p class="text-center font-medium mb-5">Share Ludon with your friends</p>
+        <ShareButton />
+      </div>
+
+      <p class="text-center">
+        Created by
+        <a class="underline font-medium" href="https://x.com/yourcodebuddy">Yourcodebuddy</a>
+      </p>
+    </div>
+  </main>
 </Layout>
+
+<script>
+  sessionStorage.clear();
+</script>
