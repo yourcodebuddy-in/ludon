@@ -29,6 +29,7 @@ import GameStartCountdown from "../components/game-board/game-start-countdown.as
 <script>
   const selectedGameOption = sessionStorage.getItem("game-option");
   const gameScript = document.createElement("script");
+  gameScript.type = "text/javascript";
   gameScript.src = `scripts/${selectedGameOption}.js`;
   document.head.appendChild(gameScript);
 </script>
