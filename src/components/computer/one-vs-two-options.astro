@@ -120,19 +120,14 @@ import computerImg from "../../assets/computer.png";
   sessionStorage.setItem("one-vs-two-computer-player-2", "");
 
   // Load previously saved computer selections from session storage
-  try {
-    // Check for individual computer player settings
-    for (let i = 1; i <= 3; i++) {
-      const isComputerPlayer = sessionStorage.getItem(`one-vs-two-computer-player-${i}`);
-      if (isComputerPlayer) {
-        const button = computerButtons[i - 1];
-        if (button) {
-          button.setAttribute("aria-selected", "true");
-        }
+  for (let i = 1; i <= 3; i++) {
+    const isComputerPlayer = sessionStorage.getItem(`one-vs-two-computer-player-${i}`);
+    if (isComputerPlayer) {
+      const button = computerButtons[i - 1];
+      if (button) {
+        button.setAttribute("aria-selected", "true");
       }
     }
-  } catch (error) {
-    console.error("Error loading saved computer selections:", error);
   }
 
   // Handle horse selection
@@ -194,7 +189,8 @@ import computerImg from "../../assets/computer.png";
 
         // Update computer player values in session storage
         computerPlayers.forEach(({ position, colorIndex }) => {
-          sessionStorage.setItem(`one-vs-two-computer-player-${position}`, colorIndex.toString());
+          const playerId = sessionStorage.getItem(`one-vs-two-player-${position}`);
+          sessionStorage.setItem(`one-vs-two-computer-player-${position}`, playerId || "");
         });
       });
     }
@@ -313,7 +309,6 @@ import computerImg from "../../assets/computer.png";
       const player3HorseType = selectedHorses[3];
       const colorIndex = horseTypeToIndex[player3HorseType as keyof typeof horseTypeToIndex];
       sessionStorage.setItem("one-vs-two-computer-player-1", colorIndex.toString());
-      alert("At least one player must be computer controlled. Player 3 has been set as computer.");
     }
 
     // Save player names and proceed

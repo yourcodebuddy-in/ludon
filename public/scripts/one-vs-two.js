@@ -1091,10 +1091,10 @@ function findWinner() {
     $(`td${gameParticipants[2]}`).find("img").length != 4
   ) {
     if ($(`td${identifyPlayer}57`).find("img").length == 4) {
-      $("#player-" + x + " > table").html("");
+      $("#player-" + x + " > table > tbody").css("opacity", "0");
       $("#player-" + x + " > table").css({
         "background-image": 'url("crowns/first-winner.png")',
-        "background-size": "contain",
+        "background-size": "75%",
         "background-repeat": "no-repeat",
         "background-position": "center",
       });
@@ -1120,10 +1120,10 @@ function findWinner() {
       $(`td${gameParticipants[2]}`).find("img").length == 4)
   ) {
     if ($(`td${identifyPlayer}57`).find("img").length == 4) {
-      $("#player-" + x + " > table").html("");
+      $("#player-" + x + " > table > tbody").css("opacity", "0");
       $("#player-" + x + " > table").css({
         "background-image": 'url("crowns/second-winner.png")',
-        "background-size": "contain",
+        "background-size": "75%",
         "background-repeat": "no-repeat",
         "background-position": "center",
       });
@@ -1152,11 +1152,6 @@ function findWinner() {
         $(`#winner-1-name`).text(firstWinner);
         $(`#winner-2-name`).text(secondWinner);
         $(`#winner-3-name`).text(thirdWinner);
-
-        //Code for updating player images in final congratulations message
-        $(`#winner1-image`).attr("src", `https://api.dicebear.com/9.x/thumbs/svg?seed=${firstWinner}`);
-        $(`#winner2-image`).attr("src", `https://api.dicebear.com/9.x/thumbs/svg?seed=${secondWinner}`);
-        $(`#winner3-image`).attr("src", `https://api.dicebear.com/9.x/thumbs/svg?seed=${thirdWinner}`);
       }, 500);
     }
   }
