@@ -1,0 +1,34 @@
+---
+import Layout from "../layouts/Layout.astro";
+import PlayerCard from "../components/game-board/player-card.astro";
+import LudoBoard from "../components/game-board/ludo-board.astro";
+import GameAudio from "../components/game-audio.astro";
+import WinnersModel from "../components/game-board/winners-model.astro";
+import GameStartCountdown from "../components/game-board/game-start-countdown.astro";
+---
+
+<Layout>
+  <main class="flex justify-center items-center h-dvh p-2">
+    <WinnersModel />
+    <section>
+      <section class="flex justify-between w-[320px] mx-auto player-area">
+        <PlayerCard id={1} playerName="Player 1" />
+        <PlayerCard id={2} playerName="Player 2" reverse />
+      </section>
+      <LudoBoard />
+      <section class="flex justify-between w-[320px] mx-auto player-area">
+        <PlayerCard id={3} playerName="Player 3" />
+        <PlayerCard id={4} playerName="Player 4" reverse />
+      </section>
+    </section>
+    <GameAudio />
+    <GameStartCountdown />
+  </main>
+</Layout>
+
+<script>
+  const selectedGameOption = sessionStorage.getItem("game-option");
+  const gameScript = document.createElement("script");
+  gameScript.src = `scripts/${selectedGameOption}.js`;
+  document.head.appendChild(gameScript);
+</script>

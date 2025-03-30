@@ -24,7 +24,11 @@ import { cn } from "../lib/utils";
   );
 
   // Initialize from session storage or default to first option
-  const savedOption = sessionStorage.getItem("game-option") || "one-vs-one";
+  let savedOption = sessionStorage.getItem("game-option");
+  if (!savedOption) {
+    sessionStorage.setItem("game-option", "one-vs-one");
+    savedOption = "one-vs-one";
+  }
 
   // Function to update UI based on selected option
   function updateUI(selectedId: string) {

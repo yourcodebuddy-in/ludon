@@ -99,6 +99,9 @@ import computerImg from "../../assets/computer.png";
     3: "y",
   };
 
+  // Map horse type to index
+  const horseTypeToIndex = { r: 1, b: 2, y: 3, g: 4 };
+
   // Initialize session storage with default values
   sessionStorage.setItem("one-vs-two-player-1", "1");
   sessionStorage.setItem("game-participants-1", ".r57");
@@ -112,16 +115,22 @@ import computerImg from "../../assets/computer.png";
   sessionStorage.setItem("one-vs-two-player-2-name", "Player 2");
   sessionStorage.setItem("one-vs-two-player-3-name", "Player 3");
 
+  // Set default computer player (player 3 - yellow)
+  sessionStorage.setItem("one-vs-two-computer-player-1", "3");
+  sessionStorage.setItem("one-vs-two-computer-player-2", "");
+
   // Load previously saved computer selections from session storage
   try {
-    const savedComputerPlayers = JSON.parse(sessionStorage.getItem("one-vs-two-computer-players") || "[]");
-    savedComputerPlayers.forEach((player: string) => {
-      const playerNum = parseInt(player.substring(1));
-      const button = computerButtons[playerNum - 1];
-      if (button) {
-        button.setAttribute("aria-selected", "true");
+    // Check for individual computer player settings
+    for (let i = 1; i <= 3; i++) {
+      const isComputerPlayer = sessionStorage.getItem(`one-vs-two-computer-player-${i}`);
+      if (isComputerPlayer) {
+        const button = computerButtons[i - 1];
+        if (button) {
+          button.setAttribute("aria-selected", "true");
+        }
       }
-    });
+    }
   } catch (error) {
     console.error("Error loading saved computer selections:", error);
   }
@@ -155,8 +164,6 @@ import computerImg from "../../assets/computer.png";
         // Set clicked horse to full opacity
         target.style.opacity = "1";
 
-        // Map horse type to index
-        const horseTypeToIndex = { r: 1, b: 2, y: 3, g: 4 };
         const horseIndex = horseTypeToIndex[targetClass as keyof typeof horseTypeToIndex];
 
         // Save selected horse to session storage
@@ -172,6 +179,23 @@ import computerImg from "../../assets/computer.png";
             break;
           }
         }
+
+        // Update computer player values based on horse color
+        const computerPlayers = [];
+        for (let i = 1; i <= 2; i++) {
+          const computerPlayerValue = sessionStorage.getItem(`one-vs-two-computer-player-${i}`);
+          if (computerPlayerValue) {
+            const playerIndex = parseInt(computerPlayerValue);
+            const playerHorseType = selectedHorses[playerIndex as keyof typeof selectedHorses];
+            const colorIndex = horseTypeToIndex[playerHorseType as keyof typeof horseTypeToIndex];
+            computerPlayers.push({ position: i, player: playerIndex, colorIndex });
+          }
+        }
+
+        // Update computer player values in session storage
+        computerPlayers.forEach(({ position, colorIndex }) => {
+          sessionStorage.setItem(`one-vs-two-computer-player-${position}`, colorIndex.toString());
+        });
       });
     }
   });
@@ -185,27 +209,66 @@ import computerImg from "../../assets/computer.png";
       // Toggle selection for this button
       button.setAttribute("aria-selected", isSelected ? "false" : "true");
 
-      // Get current computer players from session storage
-      let computerPlayers = JSON.parse(sessionStorage.getItem("one-vs-two-computer-players") || "[]");
+      // Count how many computer players are currently selected
+      let computerPlayerCount = 0;
+      const computerPlayers = [];
+
+      for (let i = 1; i <= 3; i++) {
+        const computerValue = sessionStorage.getItem(`one-vs-two-computer-player-${i}`);
+        if (computerValue) {
+          computerPlayerCount++;
+          if (i <= 2) {
+            // Only track the first two computer slots
+            computerPlayers.push(parseInt(computerValue));
+          }
+        }
+      }
 
       if (isSelected) {
-        // Remove this player from computer players
-        computerPlayers = computerPlayers.filter((p: string) => p !== `p${playerNumber}`);
+        // Remove this player from computer players if not the last one
+        if (computerPlayerCount > 1) {
+          // Find which computer player slot this is in
+          let slotToRemove = null;
+          for (let i = 1; i <= 2; i++) {
+            if (sessionStorage.getItem(`one-vs-two-computer-player-${i}`) === playerNumber.toString()) {
+              slotToRemove = i;
+              break;
+            }
+          }
+
+          if (slotToRemove) {
+            sessionStorage.setItem(`one-vs-two-computer-player-${slotToRemove}`, "");
+          }
+        } else {
+          // Don't allow removing the last computer player
+          button.setAttribute("aria-selected", "true");
+          alert("At least one player must be computer controlled.");
+          return;
+        }
       } else {
         // Add this player to computer players
-        computerPlayers.push(`p${playerNumber}`);
-      }
+        if (computerPlayerCount < 2) {
+          // Find an empty slot
+          let emptySlot = null;
+          for (let i = 1; i <= 2; i++) {
+            if (!sessionStorage.getItem(`one-vs-two-computer-player-${i}`)) {
+              emptySlot = i;
+              break;
+            }
+          }
 
-      // Make sure not all players are computer
-      if (computerPlayers.length === 3) {
-        // If all are selected, deselect the last one clicked
-        button.setAttribute("aria-selected", "false");
-        computerPlayers = computerPlayers.filter((p: string) => p !== `p${playerNumber}`);
-        alert("All players cannot be computer controlled. At least one player must be human.");
+          if (emptySlot) {
+            const horseType = selectedHorses[playerNumber as keyof typeof selectedHorses];
+            const colorIndex = horseTypeToIndex[horseType as keyof typeof horseTypeToIndex];
+            sessionStorage.setItem(`one-vs-two-computer-player-${emptySlot}`, colorIndex.toString());
+          }
+        } else {
+          // If already 2 computer players, don't allow a third
+          button.setAttribute("aria-selected", "false");
+          alert("Only two players can be computer controlled.");
+          return;
+        }
       }
-
-      // Save updated computer players to session storage
-      sessionStorage.setItem("one-vs-two-computer-players", JSON.stringify(computerPlayers));
     });
   });
 
@@ -234,6 +297,23 @@ import computerImg from "../../assets/computer.png";
     if (uniqueHorses.size !== 3) {
       alert("Each player must select a unique horse color before starting the game.");
       return;
+    }
+
+    // Ensure at least one computer player is selected
+    let hasComputerPlayer = false;
+    for (let i = 1; i <= 2; i++) {
+      if (sessionStorage.getItem(`one-vs-two-computer-player-${i}`)) {
+        hasComputerPlayer = true;
+        break;
+      }
+    }
+
+    if (!hasComputerPlayer) {
+      // Set player 3 as computer by default
+      const player3HorseType = selectedHorses[3];
+      const colorIndex = horseTypeToIndex[player3HorseType as keyof typeof horseTypeToIndex];
+      sessionStorage.setItem("one-vs-two-computer-player-1", colorIndex.toString());
+      alert("At least one player must be computer controlled. Player 3 has been set as computer.");
     }
 
     // Save player names and proceed

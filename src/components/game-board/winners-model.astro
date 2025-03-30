@@ -1,0 +1,112 @@
+---
+import { getPlayerAvatar, getPlayerColor } from "../../lib/utils";
+---
+
+<div
+  id="winners"
+  class="w-full max-w-md fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-white p-6 shadow-lg hidden"
+>
+  <img class="h-24 mx-auto" src="/logo.png" />
+  <h1 class="text-base text-center">Congratulations!</h1>
+  <div class="flex flex-col items-center gap-3 my-4">
+    <div
+      id="winner-1"
+      class="flex items-center w-full border-2 border-ludon-blue rounded-xl bg-white p-3 shadow-md hover:shadow-lg transition-shadow"
+    >
+      <div class="flex items-center justify-center bg-ludon-blue text-white rounded-full w-8 h-8 mr-3">
+        <span class="text-lg font-bold">1</span>
+      </div>
+      <div class="flex items-center gap-2 flex-1">
+        <img
+          id="winner-1-image"
+          class="w-[35px] h-[35px] rounded-full object-cover"
+          src={getPlayerAvatar({
+            playerName: "Player 1",
+            playerColor: getPlayerColor(1),
+          })}
+          alt="Player 1"
+        />
+        <span id="winner-1-name" class="text-lg font-semibold">Player 1</span>
+      </div>
+      <div class="flex-shrink-0">
+        <span class="bg-yellow-400 text-yellow-800 px-2 py-1 rounded-full font-bold text-xs">GOLD</span>
+      </div>
+    </div>
+
+    <div
+      id="winner-2"
+      class="flex items-center w-full border-2 border-gray-500 rounded-xl bg-white p-3 shadow-md hover:shadow-lg transition-shadow"
+    >
+      <div class="flex items-center justify-center bg-gray-500 text-white rounded-full w-8 h-8 mr-3">
+        <span class="text-lg font-bold">2</span>
+      </div>
+      <div class="flex items-center gap-2 flex-1">
+        <img
+          id="winner-2-image"
+          class="w-[35px] h-[35px] rounded-full object-cover"
+          src={getPlayerAvatar({
+            playerName: "Player 2",
+            playerColor: getPlayerColor(2),
+          })}
+          alt="Player 2"
+        />
+        <span id="winner-2-name" class="text-lg font-semibold">Player 2</span>
+      </div>
+      <div class="flex-shrink-0">
+        <span class="bg-gray-200 text-gray-600 px-2 py-1 rounded-full font-bold text-xs">SILVER</span>
+      </div>
+    </div>
+
+    <div
+      id="winner-3"
+      class="flex items-center w-full border-2 border-amber-700 rounded-xl bg-white p-3 shadow-md hover:shadow-lg transition-shadow"
+    >
+      <div class="flex items-center justify-center bg-amber-700 text-white rounded-full w-8 h-8 mr-3">
+        <span class="text-lg font-bold">3</span>
+      </div>
+      <div class="flex items-center gap-2 flex-1">
+        <img
+          id="winner-3-image"
+          class="w-[35px] h-[35px] rounded-full object-cover"
+          src={getPlayerAvatar({
+            playerName: "Player 3",
+            playerColor: getPlayerColor(3),
+          })}
+          alt="Player 3"
+        />
+        <span id="winner-3-name" class="text-lg font-semibold">Player 3</span>
+      </div>
+      <div class="flex-shrink-0">
+        <span class="bg-orange-200 text-amber-800 px-2 py-1 rounded-full font-bold text-xs">BRONZE</span>
+      </div>
+    </div>
+
+    <div
+      id="winner-4"
+      class="flex items-center w-full border-2 border-gray-400 rounded-xl bg-white p-3 shadow-md hover:shadow-lg transition-shadow"
+    >
+      <div class="flex items-center justify-center bg-gray-400 text-gray-600 rounded-full w-8 h-8 mr-3">
+        <span class="text-lg font-bold">4</span>
+      </div>
+      <div class="flex items-center gap-2 flex-1">
+        <img
+          id="winner-4-image"
+          class="w-[35px] h-[35px] rounded-full object-cover"
+          src={getPlayerAvatar({
+            playerName: "Player 4",
+            playerColor: getPlayerColor(4),
+          })}
+          alt="Player 4"
+        />
+        <span id="winner-4-name" class="text-lg font-semibold">Player 4</span>
+      </div>
+    </div>
+  </div>
+  <div class="flex gap-3 justify-center">
+    <button
+      type="button"
+      onclick="location.href='/'"
+      class="bg-ludon-blue text-white px-4 py-2 rounded-lg font-medium transition-colors">Menu</button
+    >
+  </div>
+</div>

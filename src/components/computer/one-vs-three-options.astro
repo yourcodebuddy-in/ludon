@@ -93,24 +93,64 @@ import computerImg from "../../assets/computer.png";
   const computerP4 = document.getElementById("one-vs-three-computer-p4");
   const computerButtons = [computerP1, computerP2, computerP3, computerP4];
 
-  // Initialize session storage with default values
+  // Initialize session storage with default values for player names
   sessionStorage.setItem("one-vs-three-player-1-name", "Player 1");
   sessionStorage.setItem("one-vs-three-player-2-name", "Player 2");
   sessionStorage.setItem("one-vs-three-player-3-name", "Player 3");
   sessionStorage.setItem("one-vs-three-player-4-name", "Player 4");
 
+  // Set default computer player (player 4 - green)
+  sessionStorage.setItem("one-vs-three-computer-player-1", "4");
+  sessionStorage.setItem("one-vs-three-computer-player-2", "");
+  sessionStorage.setItem("one-vs-three-computer-player-3", "");
+
   // Load previously saved computer selections from session storage
   try {
-    const savedComputerPlayers = JSON.parse(sessionStorage.getItem("one-vs-three-computer-players") || "[]");
-    savedComputerPlayers.forEach((player: string) => {
-      const playerNum = parseInt(player.substring(1));
-      const button = computerButtons[playerNum - 1];
-      if (button) {
-        button.setAttribute("aria-selected", "true");
+    // Check for individual computer player settings
+    for (let i = 1; i <= 3; i++) {
+      const computerPlayerValue = sessionStorage.getItem(`one-vs-three-computer-player-${i}`);
+      if (computerPlayerValue && computerPlayerValue !== "") {
+        const playerNum = parseInt(computerPlayerValue);
+        if (playerNum >= 1 && playerNum <= 4) {
+          const button = computerButtons[playerNum - 1];
+          if (button) {
+            button.setAttribute("aria-selected", "true");
+          }
+        }
       }
-    });
+    }
   } catch (error) {
     console.error("Error loading saved computer selections:", error);
+  }
+
+  // Function to count selected computer players
+  function countSelectedComputers() {
+    return computerButtons.filter((button) => button && button.getAttribute("aria-selected") === "true").length;
+  }
+
+  // Function to get array of selected computer player numbers (1-4)
+  function getSelectedComputerPlayers() {
+    return computerButtons
+      .map((button, index) => (button && button.getAttribute("aria-selected") === "true" ? index + 1 : null))
+      .filter((num) => num !== null) as number[];
+  }
+
+  // Function to update session storage with current computer players
+  function updateComputerPlayersStorage() {
+    const selectedPlayers = getSelectedComputerPlayers();
+
+    // Clear existing values
+    sessionStorage.setItem("one-vs-three-computer-player-1", "");
+    sessionStorage.setItem("one-vs-three-computer-player-2", "");
+    sessionStorage.setItem("one-vs-three-computer-player-3", "");
+
+    // Set new values
+    selectedPlayers.forEach((playerNum, index) => {
+      if (index < 3) {
+        // Maximum 3 computer players
+        sessionStorage.setItem(`one-vs-three-computer-player-${index + 1}`, playerNum.toString());
+      }
+    });
   }
 
   // Handle computer selection
@@ -119,32 +159,32 @@ import computerImg from "../../assets/computer.png";
       const playerNumber = index + 1;
       const isSelected = button.getAttribute("aria-selected") === "true";
 
-      // Toggle selection for this button
-      button.setAttribute("aria-selected", isSelected ? "false" : "true");
-
-      // Get current computer players from session storage
-      let computerPlayers = JSON.parse(sessionStorage.getItem("one-vs-three-computer-players") || "[]");
-
       if (isSelected) {
-        // Remove this player from computer players
-        computerPlayers = computerPlayers.filter((p: string) => p !== `p${playerNumber}`);
+        // Only allow deselection if we'll still have at least one computer player
+        if (countSelectedComputers() > 1) {
+          button.setAttribute("aria-selected", "false");
+          updateComputerPlayersStorage();
+        } else {
+          alert("At least one computer player is required.");
+        }
       } else {
-        // Add this player to computer players
-        computerPlayers.push(`p${playerNumber}`);
+        // Only allow selection if we'll have at most 3 computer players
+        if (countSelectedComputers() < 3) {
+          button.setAttribute("aria-selected", "true");
+          updateComputerPlayersStorage();
+        } else {
+          alert("Maximum 3 computer players allowed.");
+        }
       }
-
-      // Make sure not all players are computer
-      if (computerPlayers.length === 4) {
-        // If all are selected, deselect the last one clicked
-        button.setAttribute("aria-selected", "false");
-        computerPlayers = computerPlayers.filter((p: string) => p !== `p${playerNumber}`);
-        alert("All players cannot be computer controlled. At least one player must be human.");
-      }
-
-      // Save updated computer players to session storage
-      sessionStorage.setItem("one-vs-three-computer-players", JSON.stringify(computerPlayers));
     });
   });
+
+  // Ensure at least one computer player is selected by default
+  if (countSelectedComputers() === 0) {
+    // Default to player 4 (green) as computer
+    computerP4?.setAttribute("aria-selected", "true");
+    updateComputerPlayersStorage();
+  }
 
   // Save player names
   function savePlayerNames() {

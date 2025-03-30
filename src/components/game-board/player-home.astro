@@ -1,0 +1,47 @@
+---
+import { Image } from "astro:assets";
+import { cn } from "../../lib/utils";
+
+interface Props {
+  id: 1 | 2 | 3 | 4;
+  horseImg: ImageMetadata;
+  horseColor: "red" | "blue" | "green" | "yellow";
+}
+
+const { id, horseImg, horseColor } = Astro.props;
+const firstColorLetter = horseColor.charAt(0);
+---
+
+<div
+  id={`player-${id}`}
+  class={cn(
+    "w-[135px] h-[135px] text-gray-500 text-sm box-content flex justify-center items-center",
+    `bg-ludon-${horseColor} border-ludon-${horseColor}`,
+    id === 1 && "border-t-2 border-l-2 rounded-tl-[5px]",
+    id === 2 && "border-t-2 border-r-2 rounded-tr-[5px]",
+    id === 3 && "border-b-2 border-l-2 rounded-bl-[5px]",
+    id === 4 && "border-b-2 border-r-2 rounded-br-[5px]"
+  )}
+>
+  <table
+    class={cn(
+      "block p-2.5 rounded-sm bg-white bg-shadow",
+      "[&_td]:flex [&_td]:justify-center [&_td]:items-center",
+      "[&_td]:w-9 [&_td]:h-9 [&_td]:rounded-full [&_td]:bg-gray-200",
+      "[&_img]:w-3 [&_tr]:flex"
+    )}
+  >
+    <tr class="mb-1.5">
+      <td class="mr-1.5" id={`${firstColorLetter}h1`}
+        ><Image class={`${firstColorLetter}h1`} src={horseImg} alt="Player Horse" /></td
+      >
+      <td id={`${firstColorLetter}h2`}><Image class={`${firstColorLetter}h2`} src={horseImg} alt="Player Horse" /></td>
+    </tr>
+    <tr>
+      <td class="mr-1.5" id={`${firstColorLetter}h3`}
+        ><Image class={`${firstColorLetter}h3`} src={horseImg} alt="Player Horse" /></td
+      >
+      <td id={`${firstColorLetter}h4`}><Image class=`${firstColorLetter}h4` src={horseImg} alt="Player Horse" /></td>
+    </tr>
+  </table>
+</div>

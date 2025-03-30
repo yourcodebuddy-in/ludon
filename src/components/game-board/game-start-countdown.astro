@@ -1,0 +1,40 @@
+---
+interface Props {
+  countdownFrom?: number;
+}
+
+const { countdownFrom = 3 } = Astro.props;
+---
+
+<div id="game-start-countdown" class="fixed inset-0 flex items-center justify-center bg-black/80 z-50">
+  <div class="bg-white rounded-lg p-5 text-center shadow-lg">
+    <p id="countdown-text" class="text-4xl font-bold text-ludon-blue">{countdownFrom}</p>
+    <p class="text-sm mt-2 text-gray-700">Get ready to play!</p>
+    <div class="mt-3 flex justify-center space-x-1">
+      <span class="w-2 h-2 bg-ludon-red rounded-full animate-pulse"></span>
+      <span class="w-2 h-2 bg-ludon-blue rounded-full animate-pulse animation-delay-300"></span>
+      <span class="w-2 h-2 bg-ludon-green rounded-full animate-pulse animation-delay-600"></span>
+      <span class="w-2 h-2 bg-ludon-yellow rounded-full animate-pulse animation-delay-900"></span>
+    </div>
+  </div>
+</div>
+
+<script>
+  const countdownText = document.getElementById("countdown-text");
+  let count = parseInt(countdownText?.textContent || "3");
+
+  const countdown = setInterval(() => {
+    count--;
+
+    if (countdownText) {
+      countdownText.textContent = count.toString();
+    }
+
+    if (count <= 0) {
+      clearInterval(countdown);
+      new Audio("audio/game-start.wav").play();
+      document.getElementById("game-start-countdown")?.remove();
+      document.dispatchEvent(new CustomEvent("game-countdown-complete"));
+    }
+  }, 1000);
+</script>

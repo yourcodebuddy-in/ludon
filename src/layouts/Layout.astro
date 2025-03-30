@@ -10,9 +10,13 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap" rel="stylesheet" />
   </head>
-  <body class="bg-amber-100">
+  <body class="bg-ludon-yellow/50">
     <slot />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <div
+      class="bg-ludon-blue bg-ludon-red bg-ludon-green bg-ludon-yellow border-ludon-blue border-ludon-red border-ludon-green border-ludon-yellow"
+    >
+    </div>
   </body>
 </html>
 
@@ -27,8 +31,14 @@
 
   @theme inline {
     --color-ludon-red: #db5c4c;
-    --color-ludon-blue: #4287a1;
+    --color-ludon-blue: #4187a0;
     --color-ludon-green: #629e76;
     --color-ludon-yellow: #f9c64b;
+  }
+  .sixgif {
+    background-image: url("gifs/horse-circle.gif");
+    background-size: 70%;
+    background-repeat: no-repeat;
+    background-position: bottom;
   }
 </style>

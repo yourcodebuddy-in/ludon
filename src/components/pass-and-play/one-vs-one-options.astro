@@ -77,10 +77,19 @@ import computerImg from "../../assets/computer.png";
   const startButton = document.getElementById("start-game") as HTMLButtonElement | null;
 
   // Initialize from session storage or set defaults
-  const savedHorse1 = sessionStorage.getItem("one-vs-one-horse-1") || "red";
-  const savedHorse2 = sessionStorage.getItem("one-vs-one-horse-2") || "green";
-  sessionStorage.setItem("player1-name", "Player 1");
-  sessionStorage.setItem("player2-name", "Player 2");
+  let savedHorse1 = sessionStorage.getItem("one-vs-one-horse-1");
+  let savedHorse2 = sessionStorage.getItem("one-vs-one-horse-2");
+  sessionStorage.setItem("one-vs-one-player-1-name", "Player 1");
+  sessionStorage.setItem("one-vs-one-player-2-name", "Player 2");
+
+  if (!savedHorse1) {
+    sessionStorage.setItem("one-vs-one-horse-1", "red");
+    savedHorse1 = "red";
+  }
+  if (!savedHorse2) {
+    sessionStorage.setItem("one-vs-one-horse-2", "green");
+    savedHorse2 = "green";
+  }
 
   // Set initial selection
   if (savedHorse1 === "blue" && savedHorse2 === "yellow") {
@@ -118,8 +127,8 @@ import computerImg from "../../assets/computer.png";
       player2Name = player2YellowInput?.value || "Player 2";
     }
 
-    sessionStorage.setItem("player1-name", player1Name);
-    sessionStorage.setItem("player2-name", player2Name);
+    sessionStorage.setItem("one-vs-one-player-1-name", player1Name);
+    sessionStorage.setItem("one-vs-one-player-2-name", player2Name);
   }
 
   // Save names on input change

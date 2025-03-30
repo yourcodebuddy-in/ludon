@@ -1,0 +1,32 @@
+---
+import RedHorseImg from "../../assets/horses/red.png";
+import BlueHorseImg from "../../assets/horses/blue.png";
+import YellowHorseImg from "../../assets/horses/yellow.png";
+import GreenHorseImg from "../../assets/horses/green.png";
+import PlayerHome from "./player-home.astro";
+import LudoHome from "./ludo-home.astro";
+import BoardBlueMiddlePath from "./board-blue-middle-path.astro";
+import BoardRedMiddlePath from "./board-red-middle-path.astro";
+import BoardGreenMiddlePath from "./board-green-middle-path.astro";
+import BoardYellowMiddlePath from "./board-yellow-middle-path.astro";
+---
+
+<section id="ludo-board" class="mt-10 mb-5">
+  <div class="flex justify-center w-full game-row" id="top-game-row">
+    <PlayerHome id={1} horseImg={RedHorseImg} horseColor="red" />
+    <BoardBlueMiddlePath />
+    <PlayerHome id={2} horseImg={BlueHorseImg} horseColor="blue" />
+  </div>
+
+  <div id="middle-game-row" class="flex w-full justify-center">
+    <BoardRedMiddlePath />
+    <LudoHome />
+    <BoardGreenMiddlePath />
+  </div>
+
+  <div class="flex justify-center w-full game-row" id="bottom-game-row">
+    <PlayerHome id={3} horseImg={YellowHorseImg} horseColor="yellow" />
+    <BoardYellowMiddlePath />
+    <PlayerHome id={4} horseImg={GreenHorseImg} horseColor="green" />
+  </div>
+</section>
