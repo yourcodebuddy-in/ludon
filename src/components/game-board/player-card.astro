@@ -5,24 +5,13 @@ interface Props {
   reverse?: boolean;
 }
 
-import { getPlayerAvatar, getPlayerColor } from "../../lib/utils";
 const { id, playerName, reverse = false } = Astro.props;
-const playerColor = getPlayerColor(id);
 ---
 
 <div id={`player-${id}-area`} class={`flex ${reverse ? "flex-row-reverse" : ""}`}>
-  <div class="w-15 h-15 rounded-md">
+  <div class="w-15 h-15 rounded-md bg-white">
     <figure>
-      <img
-        id={`player-${id}-image`}
-        class="w-full rounded-md"
-        src={getPlayerAvatar({
-          playerName: "playerName",
-          reverse: reverse,
-          playerColor,
-        })}
-        alt={playerName}
-      />
+      <img id={`player-${id}-image`} class="size-full rounded-md aspect-square" alt={playerName} />
       <figcaption id={`player-${id}-name`} class="text-xs text-center mt-1">{playerName}</figcaption>
     </figure>
   </div>
@@ -31,3 +20,50 @@ const playerColor = getPlayerColor(id);
   </div>
   <img id={`player-${id}-dice-arrow`} class={`h-12 mt-1 ${reverse ? "" : "rotate-180"}`} />
 </div>
+
+<script>
+  import { getPlayerAvatar, getPlayerColor } from "../../lib/utils";
+
+  const playerOneImage = document.getElementById(`player-1-image`);
+  const playerTwoImage = document.getElementById(`player-2-image`);
+  const playerThreeImage = document.getElementById(`player-3-image`);
+  const playerFourImage = document.getElementById(`player-4-image`);
+  const winnerOneImage = document.getElementById(`winner-1-image`);
+  const winnerTwoImage = document.getElementById(`winner-2-image`);
+  const winnerThreeImage = document.getElementById(`winner-3-image`);
+  const winnerFourImage = document.getElementById(`winner-4-image`);
+
+  const gameMode = sessionStorage.getItem("game-option");
+  const playerOneName = sessionStorage.getItem(`${gameMode}-player-1-name`) ?? "Player 1";
+  const playerTwoName = sessionStorage.getItem(`${gameMode}-player-2-name`) ?? "Player 2";
+  const playerThreeName = sessionStorage.getItem(`${gameMode}-player-3-name`) ?? "Player 3";
+  const playerFourName = sessionStorage.getItem(`${gameMode}-player-4-name`) ?? "Player 4";
+
+  const playerOneAvatar = getPlayerAvatar({
+    playerName: playerOneName,
+    playerColor: getPlayerColor(1),
+  });
+  const playerTwoAvatar = getPlayerAvatar({
+    playerName: playerTwoName,
+    playerColor: getPlayerColor(2),
+    reverse: true,
+  });
+  const playerThreeAvatar = getPlayerAvatar({
+    playerName: playerThreeName,
+    playerColor: getPlayerColor(3),
+  });
+  const playerFourAvatar = getPlayerAvatar({
+    playerName: playerFourName,
+    playerColor: getPlayerColor(4),
+    reverse: true,
+  });
+
+  playerOneImage?.setAttribute("src", playerOneAvatar);
+  playerTwoImage?.setAttribute("src", playerTwoAvatar);
+  playerThreeImage?.setAttribute("src", playerThreeAvatar);
+  playerFourImage?.setAttribute("src", playerFourAvatar);
+  winnerOneImage?.setAttribute("src", playerOneAvatar);
+  winnerTwoImage?.setAttribute("src", playerTwoAvatar);
+  winnerThreeImage?.setAttribute("src", playerThreeAvatar);
+  winnerFourImage?.setAttribute("src", playerFourAvatar);
+</script>

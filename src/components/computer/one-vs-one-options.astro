@@ -112,43 +112,15 @@ import computerImg from "../../assets/computer.png";
   const computerButtons = [computerP1Red, computerP1Blue, computerP2Yellow, computerP2Green];
 
   // Initialize from session storage or set defaults
-  const savedHorse1 = sessionStorage.getItem("one-vs-one-horse-1") || "red";
-  const savedHorse2 = sessionStorage.getItem("one-vs-one-horse-2") || "green";
-  const savedComputerPlayer = sessionStorage.getItem("one-vs-one-computer-player") || "4"; // Default to player 2 (green)
-
-  // Set default computer player if none is set
-  if (!savedComputerPlayer) {
-    sessionStorage.setItem("one-vs-one-computer-player", "4");
-    sessionStorage.setItem("one-vs-one-computer-player-color", "green");
-  }
-
+  sessionStorage.setItem("one-vs-one-horse-1", "red");
+  sessionStorage.setItem("one-vs-one-horse-2", "green");
+  sessionStorage.setItem("one-vs-one-computer-player", "4");
+  sessionStorage.setItem("one-vs-one-computer-player-color", "green");
   sessionStorage.setItem("one-vs-one-player-1-name", "Player 1");
   sessionStorage.setItem("one-vs-one-player-2-name", "Player 2");
 
-  // Set initial selection
-  if (savedHorse1 === "blue" && savedHorse2 === "yellow") {
-    redGreenCombo?.setAttribute("aria-selected", "false");
-    blueYellowCombo?.setAttribute("aria-selected", "true");
-  } else {
-    redGreenCombo?.setAttribute("aria-selected", "true");
-    blueYellowCombo?.setAttribute("aria-selected", "false");
-  }
-
   // Set initial computer selection based on saved values
-  if (savedComputerPlayer) {
-    const playerToButtonMap = {
-      "1": "computer-p1-red",
-      "4": "computer-p2-green",
-      "2": "computer-p1-blue",
-      "3": "computer-p2-yellow",
-    };
-
-    const buttonId = playerToButtonMap[savedComputerPlayer as keyof typeof playerToButtonMap];
-    const computerButton = document.getElementById(buttonId);
-    if (computerButton) {
-      computerButton.setAttribute("aria-selected", "true");
-    }
-  }
+  computerP2Green?.setAttribute("aria-selected", "true");
 
   // Handle combo selection
   redGreenCombo?.addEventListener("click", () => {

@@ -4,9 +4,9 @@ import { getPlayerAvatar, getPlayerColor } from "../../lib/utils";
 
 <div
   id="winners"
-  class="w-full max-w-md fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-white p-6 shadow-lg hidden"
+  class="w-full max-w-md fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-white p-6 shadow-lg z-100 hidden"
 >
-  <img class="h-24 mx-auto" src="/logo.png" />
+  <img class="h-24 mx-auto mb-2" src="/logo.png" />
   <h1 class="text-base text-center">Congratulations!</h1>
   <div class="flex flex-col items-center gap-3 my-4">
     <div
@@ -17,15 +17,7 @@ import { getPlayerAvatar, getPlayerColor } from "../../lib/utils";
         <span class="text-lg font-bold">1</span>
       </div>
       <div class="flex items-center gap-2 flex-1">
-        <img
-          id="winner-1-image"
-          class="w-[35px] h-[35px] rounded-full object-cover"
-          src={getPlayerAvatar({
-            playerName: "Player 1",
-            playerColor: getPlayerColor(1),
-          })}
-          alt="Player 1"
-        />
+        <img id="winner-1-image" class="w-[35px] h-[35px] rounded-full object-cover" alt="Player 1" />
         <span id="winner-1-name" class="text-lg font-semibold">Player 1</span>
       </div>
       <div class="flex-shrink-0">
@@ -41,15 +33,7 @@ import { getPlayerAvatar, getPlayerColor } from "../../lib/utils";
         <span class="text-lg font-bold">2</span>
       </div>
       <div class="flex items-center gap-2 flex-1">
-        <img
-          id="winner-2-image"
-          class="w-[35px] h-[35px] rounded-full object-cover"
-          src={getPlayerAvatar({
-            playerName: "Player 2",
-            playerColor: getPlayerColor(2),
-          })}
-          alt="Player 2"
-        />
+        <img id="winner-2-image" class="w-[35px] h-[35px] rounded-full object-cover" alt="Player 2" />
         <span id="winner-2-name" class="text-lg font-semibold">Player 2</span>
       </div>
       <div class="flex-shrink-0">
@@ -65,15 +49,7 @@ import { getPlayerAvatar, getPlayerColor } from "../../lib/utils";
         <span class="text-lg font-bold">3</span>
       </div>
       <div class="flex items-center gap-2 flex-1">
-        <img
-          id="winner-3-image"
-          class="w-[35px] h-[35px] rounded-full object-cover"
-          src={getPlayerAvatar({
-            playerName: "Player 3",
-            playerColor: getPlayerColor(3),
-          })}
-          alt="Player 3"
-        />
+        <img id="winner-3-image" class="w-[35px] h-[35px] rounded-full object-cover" alt="Player 3" />
         <span id="winner-3-name" class="text-lg font-semibold">Player 3</span>
       </div>
       <div class="flex-shrink-0">
@@ -89,15 +65,7 @@ import { getPlayerAvatar, getPlayerColor } from "../../lib/utils";
         <span class="text-lg font-bold">4</span>
       </div>
       <div class="flex items-center gap-2 flex-1">
-        <img
-          id="winner-4-image"
-          class="w-[35px] h-[35px] rounded-full object-cover"
-          src={getPlayerAvatar({
-            playerName: "Player 4",
-            playerColor: getPlayerColor(4),
-          })}
-          alt="Player 4"
-        />
+        <img id="winner-4-image" class="w-[35px] h-[35px] rounded-full object-cover" alt="Player 4" />
         <span id="winner-4-name" class="text-lg font-semibold">Player 4</span>
       </div>
     </div>

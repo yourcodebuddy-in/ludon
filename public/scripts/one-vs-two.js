@@ -90,7 +90,6 @@ identifyPlayerInfo();
 function transferDice() {
   if ($(`.path td img.${identifyColor}`).length == 0) {
     setTimeout(transferDiceCode, 300);
-    console.log(identifyPlayer);
   }
 }
 
@@ -210,7 +209,6 @@ $(`.player-dice`).click(function () {
   if (d == 0) {
     d++;
     playerDice = $(this).attr("id"); //Player dice id of current player
-    console.log(playerDice);
 
     randomNumbers = [6, 1, 2, 3, 4, 5, 6];
     // randomDice = 6;
@@ -321,7 +319,6 @@ function highlightHorses() {
     x != sessionStorage.getItem("one-vs-two-computer-player-1") ||
     x != sessionStorage.getItem("one-vs-two-computer-player-2")
   ) {
-    console.log("Highlighted!");
     if (
       randomDice <= 57 - window[`lastPos${identifyPlayer2}H1`] &&
       $(`#player-${x} > table`).find("img").length < 4 &&
@@ -408,8 +405,6 @@ function moveHorse(event) {
 
   count = 0; //Count is used to stop Interval after certain no of executions
 
-  console.log("New Count " + count);
-
   if ($(`.path`).find(`img.${identifyColor}`).length >= 1) {
     if (selectedPathCell.length == 12) {
       selectedPathCellClass = selectedPathCell[2].classList[0];
@@ -457,7 +452,6 @@ function moveHorse(event) {
 
   playerHorseClassCaps = playerHorseClass.toUpperCase();
 
-  console.log(playerHorseClassCaps);
   if (
     window[`lastPos${playerHorseClassCaps}`] < 52 &&
     ("." + playerHorseClass == identifyPlayer + "h1" ||
@@ -467,7 +461,6 @@ function moveHorse(event) {
   ) {
     newfunc = setInterval(function () {
       window[`newPos${playerHorseClassCaps}`] = window[`lastPos${playerHorseClassCaps}`] + 1; //Increments player path position
-      console.log(identifyPlayer);
 
       //Moves the selected player horse to next path cell
       $(`${identifyPlayer}${window[`newPos${playerHorseClassCaps}`]}`).append(
@@ -485,15 +478,11 @@ function moveHorse(event) {
       audio = new Audio("audio/horse-move.wav");
       audio.play();
 
-      console.log("lastpos" + playerHorseClassCaps + "  " + window[`lastPos${playerHorseClassCaps}`]);
-
       mergeHorseClassLast = identifyPlayer + window[`lastPos${playerHorseClassCaps}`]; // Used in unMergeHorses function
       unMergeHorses(); // Code for unmerging horses when one or more horses leaves the horse group
 
       //Last position is now equal to new position of horse
       window[`lastPos${playerHorseClassCaps}`] = window[`newPos${playerHorseClassCaps}`];
-
-      console.log("newpos" + playerHorseClassCaps + "  " + window[`newPos${playerHorseClassCaps}`]);
 
       count++;
 
@@ -609,7 +598,6 @@ function moveHorse(event) {
   ) {
     newfunc = setInterval(function () {
       window[`newPos${playerHorseClassCaps}`] = window[`lastPos${playerHorseClassCaps}`] + 1;
-      console.log(identifyPlayer);
 
       //Moves the selected player horse to next path cell
       $(`${identifyPlayer}${window[`newPos${playerHorseClassCaps}`]}`).append(
@@ -627,18 +615,13 @@ function moveHorse(event) {
       audio = new Audio("audio/horse-move.wav");
       audio.play();
 
-      console.log("lastpos" + playerHorseClassCaps + "  " + window[`lastPos${playerHorseClassCaps}`]);
-
       mergeHorseClassLast = identifyPlayer + window[`lastPos${playerHorseClassCaps}`]; // Used in unMergeHorses function
       unMergeHorses(); // Code for unmerging horses when one or more horses leaves the horse group
 
       //Last position is now equal to new position of horse
       window[`lastPos${playerHorseClassCaps}`] = window[`newPos${playerHorseClassCaps}`];
 
-      console.log("newpos" + playerHorseClassCaps + "  " + window[`newPos${playerHorseClassCaps}`]);
-
       count++;
-      console.log("Updated Count " + count);
 
       if (count == randomDice) {
         clearInterval(newfunc);
@@ -906,7 +889,6 @@ function moveDice() {
         "." + userSelectedHorse == identifyPlayer + "h3" ||
         "." + userSelectedHorse == identifyPlayer + "h4"
       ) {
-        console.log("User selected " + identifyColor + "Horse is " + userSelectedHorse);
         z++;
         $("." + userSelectedHorse).remove();
         $("#player-" + x + " td").removeClass("sixgif");

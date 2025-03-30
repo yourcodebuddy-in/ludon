@@ -13,7 +13,13 @@ export function getPlayerAvatar({
   reverse?: boolean;
   playerColor?: string;
 }) {
-  return `https://api.dicebear.com/9.x/thumbs/svg?seed=${playerName}&flip=${reverse}&shapeColor=${playerColor}`;
+  const url = new URL("https://api.dicebear.com/9.x/thumbs/svg");
+  url.searchParams.set("seed", playerName);
+  url.searchParams.set("flip", String(reverse));
+  if (playerColor) {
+    url.searchParams.set("shapeColor", playerColor);
+  }
+  return url.toString();
 }
 
 export function getPlayerColor(id: number) {

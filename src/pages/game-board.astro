@@ -5,12 +5,13 @@ import LudoBoard from "../components/game-board/ludo-board.astro";
 import GameAudio from "../components/game-audio.astro";
 import WinnersModel from "../components/game-board/winners-model.astro";
 import GameStartCountdown from "../components/game-board/game-start-countdown.astro";
+import GameAssets from "../components/game-assets.astro";
 ---
 
 <Layout>
   <main class="flex justify-center items-center h-dvh p-2">
     <WinnersModel />
-    <section>
+    <section id="game-container" class="transform-origin-center">
       <section class="flex justify-between w-[320px] mx-auto player-area">
         <PlayerCard id={1} playerName="Player 1" />
         <PlayerCard id={2} playerName="Player 2" reverse />
@@ -22,14 +23,32 @@ import GameStartCountdown from "../components/game-board/game-start-countdown.as
       </section>
     </section>
     <GameAudio />
+    <GameAssets />
     <GameStartCountdown />
   </main>
 </Layout>
 
 <script>
-  const selectedGameOption = sessionStorage.getItem("game-option");
-  const gameScript = document.createElement("script");
-  gameScript.type = "text/javascript";
-  gameScript.src = `scripts/${selectedGameOption}.js`;
-  document.head.appendChild(gameScript);
+  // Load game script based on selected option
+  const gameOption = sessionStorage.getItem("game-option");
+  const script = document.createElement("script");
+  script.src = `scripts/${gameOption}.js`;
+  script.type = "application/javascript";
+  document.head.appendChild(script);
+
+  // Optimize game size for screen
+  function optimizeGameSize() {
+    const container = document.getElementById("game-container");
+    if (!container) return;
+
+    // Calculate scale based on viewport and game size
+    const vHeight = window.innerHeight * 0.7;
+    const vWidth = window.innerWidth * 0.7;
+    const scale = Math.max(1, Math.min(vHeight / container.offsetHeight, vWidth / container.offsetWidth));
+
+    container.style.transform = `scale(${scale})`;
+  }
+
+  window.addEventListener("DOMContentLoaded", optimizeGameSize);
+  window.addEventListener("resize", optimizeGameSize);
 </script>

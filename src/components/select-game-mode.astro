@@ -6,14 +6,14 @@ import { cn } from "../lib/utils";
   <h2 class="text-center text-xl">Choose a mode</h2>
   <div
     class={cn(
-      "grid grid-cols-3 justify-center border-2 border-ludon-green rounded-full w-[300px] h-[45px] font-bold mx-auto",
+      "grid grid-cols-3 justify-center border-2 border-ludon-green rounded-full w-full h-[45px] font-bold mx-auto",
       "*:flex *:justify-center *:items-center",
       "*:aria-selected:bg-ludon-green *:aria-selected:text-white"
     )}
   >
-    <div id="one-vs-one" aria-selected="true" class="rounded-l-full border-r border-black">1 vs 1</div>
+    <div id="one-vs-one" aria-selected="true" class="rounded-l-full border-r border-ludon-green">1 vs 1</div>
     <div id="one-vs-two">1 vs 2</div>
-    <div id="one-vs-three" class="rounded-r-full border-l border-black">1 vs 3</div>
+    <div id="one-vs-three" class="rounded-r-full border-l border-ludon-green">1 vs 3</div>
   </div>
 </div>
 
